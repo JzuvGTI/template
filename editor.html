@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Alpine.js for Live Search -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script>
+    <!-- CodeMirror CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/codemirror.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/theme/dracula.min.css" rel="stylesheet">
+    <!-- Select2 CSS for searchable dropdown -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        /* Custom styles for the CodeMirror editor */
+        .CodeMirror {
+            height: auto;
+            border-radius: 4px;
+            background-color: #1e1e1e; /* Dark background to match theme */
+            color: #d4d4d4; /* Light text color */
+        }
+
+        /* Custom styles for Select2 dropdown */
+        .select2-container--classic .select2-selection--single {
+            background-color: #2d2d2d; /* Match the theme background */
+            color: #d4d4d4; /* Light text color */
+            border: 1px solid #444; /* Border color */
+        }
+
+        .select2-container--classic .select2-selection--single .select2-selection__rendered {
+            color: #d4d4d4; /* Light text color */
+        }
+
+        .select2-container--classic .select2-selection--single .select2-selection__arrow {
+            background-color: #444; /* Match theme background */
+            border-left: 1px solid #333; /* Arrow border color */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Mobile Menu Button - Only visible on mobile -->
+    <div class="md:hidden flex items-center p-4 bg-gray-800">
+        <!-- Logo -->
+        <img src="https://via.placeholder.com/40" alt="Logo" class="w-10 h-10 rounded-full mr-3">
+        <!-- Text -->
+        <span class="text-xl font-bold">Admin Dashboard</span>
+    </div>
+
+    <div class="flex flex-col md:flex-row">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-gray-800 h-screen md:sticky md:top-0 md:flex md:flex-col md:justify-between transition-transform transform md:translate-x-0 -translate-x-full md:block fixed z-40">
+            <div id="sidebar-content" class="flex flex-col h-full">
+                <div id="profile" class="px-6 py-4 bg-gray-900">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-lg">P</div>
+                        <div class="text-sm text-gray-300">
+                            <p class="font-medium">Username</p>
+                            <p class="text-xs">Admin</p>
+                        </div>
+                    </div>
+                </div>
+                <nav class="mt-5 flex-1 overflow-y-auto">
+                    <ul class="space-y-2">
+                        <!-- Menu Items -->
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="index.html" class="flex items-center">
+                                <i class="fas fa-tachometer-alt mr-3"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="form.html" class="flex items-center">
+                                <i class="fab fa-wpforms mr-3"></i>
+                                <span>Form</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="table.html" class="flex items-center">
+                                <i class="fas fa-table mr-3"></i>
+                                <span>Table</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="card.html" class="flex items-center">
+                                <i class="fas fa-th mr-3"></i>
+                                <span>Card</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="editor.html" class="flex items-center">
+                                <i class="fas fa-code mr-3"></i>
+                                <span>Code Editor</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="#" class="flex items-center">
+                                <i class="fas fa-cogs mr-3"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="#" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-3"></i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- Sidebar Close Button -->
+                <button id="sidebar-close" class="absolute top-2 right-2 md:hidden text-gray-300 focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 mb-16 md:mb-0">
+            <div class="flex-1 p-6">
+                <h1 class="text-3xl mb-6">Code Editor</h1>
+
+                <!-- Language Selector -->
+                <div class="mb-4">
+                    <label for="language-selector" class="block text-lg font-semibold">Choose Programming Language</label>
+                    <select id="language-selector" class="w-full p-2.5 bg-gray-800 text-gray-200 rounded mt-2" onchange="changeLanguage()">
+                        <option value="javascript" data-ext="js">JavaScript</option>
+                        <option value="python" data-ext="py">Python</option>
+                        <option value="clike" data-ext="cpp">C++</option>
+                        <option value="java" data-ext="java">Java</option>
+                        <option value="php" data-ext="php">PHP</option>
+                        <option value="ruby" data-ext="rb">Ruby</option>
+                        <option value="go" data-ext="go">Go</option>
+                        <option value="clike" data-ext="c">C</option>
+                        <option value="swift" data-ext="swift">Swift</option>
+                        <option value="rust" data-ext="rs">Rust</option>
+                        <option value="typescript" data-ext="ts">TypeScript</option>
+                        <option value="shell" data-ext="sh">Bash</option>
+                        <option value="htmlmixed" data-ext="html">HTML/CSS</option>
+                        <option value="sql" data-ext="sql">SQL</option>
+                        <option value="perl" data-ext="pl">Perl</option>
+                        <option value="lua" data-ext="lua">Lua</option>
+                        <option value="scheme" data-ext="scm">Scheme</option>
+                        <option value="haskell" data-ext="hs">Haskell</option>
+                        <option value="erlang" data-ext="erl">Erlang</option>
+                        <option value="elixir" data-ext="ex">Elixir</option>
+                        <option value="markdown" data-ext="md">Markdown</option>
+                        <option value="yaml" data-ext="yaml">YAML</option>
+                        <option value="r" data-ext="r">R</option>
+                        <option value="kotlin" data-ext="kt">Kotlin</option>
+                        <option value="xml" data-ext="xml">XML</option>
+                    </select>
+                </div>
+
+                <!-- CodeMirror Editor -->
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <p class="text-lg font-semibold mb-3">Filename: <span id="filename">test.js</span></p>
+                    <textarea id="code-editor"></textarea>
+                </div>
+            </div>
+        </main>
+
+        <footer class="md:hidden fixed bottom-0 w-full bg-gray-800 text-gray-200 flex justify-around items-center h-16">
+            <a href="index.html">
+                <i class="fas fa-tachometer-alt text-lg"></i>
+            </a>
+            <a href="table.html">
+                <i class="fas fa-table text-lg"></i>
+            </a>
+            <a href="form.html">
+                <i class="fab fa-wpforms text-lg"></i>
+            </a>
+            <a href="editor.html">
+                <i class="fas fa-code text-lg"></i>
+            </a>
+            <a href="toast.html">
+                <i class="fas fa-bell text-lg"></i>
+            </a>
+            <a href="#">
+                <i class="fas fa-cogs text-lg"></i>
+            </a>
+            <a href="#">
+                <i class="fas fa-sign-out-alt text-lg"></i>
+            </a>
+        </footer>
+    </div>
+    
+    <!-- CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/php/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/ruby/ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/go/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/swift/swift.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/rust/rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/typescript/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/shell/shell.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
+    
+    <script>
+        let editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
+            mode: "javascript",
+            theme: "dracula",
+            lineNumbers: true
+        });
+    
+        function changeLanguage() {
+            let language = document.getElementById("language-selector").value;
+            let filename = document.getElementById("language-selector").selectedOptions[0].text;
+            document.getElementById("filename").textContent = "test." + document.getElementById("language-selector").selectedOptions[0].getAttribute("data-ext");
+            
+            editor.setOption("mode", language);
+        }
+    
+        $(document).ready(function() {
+            $('#language-selector').select2({
+                theme: 'classic'
+            });
+        });
+    </script>
+</body>
+</html>

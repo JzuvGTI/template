@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Alpine.js for Live Search -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script>
+    <style>
+        /* Custom styles for toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            transform: translateX(-50%);
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+            min-width: 280px;
+            max-width: 90%;
+            color: rgb(255, 255, 255);
+            z-index: 50;
+            animation: fadeInOut 4s ease-in-out;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        .toast:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .toast .toast-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .toast .toast-body {
+            font-weight: 400;
+            font-size: 15px;
+        }
+
+        .toast button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .toast button:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(50px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(50px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .toast {
+                min-width: 250px;
+                padding: 12px;
+            }
+        }
+
+        /* Button Styles */
+        .modern-btn {
+            background-color: #4f46e5;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .modern-btn:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        .modern-btn:focus {
+            outline: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Mobile Menu Button - Only visible on mobile -->
+    <div class="md:hidden flex items-center p-4 bg-gray-800">
+        <!-- Logo -->
+        <img src="https://via.placeholder.com/40" alt="Logo" class="w-10 h-10 rounded-full mr-3">
+        <!-- Text -->
+        <span class="text-xl font-bold">Admin Dashboard</span>
+    </div>
+
+    <div class="flex flex-col md:flex-row">
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="w-64 bg-gray-800 h-screen md:sticky md:top-0 md:flex md:flex-col md:justify-between transition-transform transform md:translate-x-0 -translate-x-full md:block fixed z-40">
+            <div id="sidebar-content" class="flex flex-col h-full">
+                <div id="profile" class="px-6 py-4 bg-gray-900">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-lg">
+                            P</div>
+                        <div class="text-sm text-gray-300">
+                            <p class="font-medium">Username</p>
+                            <p class="text-xs">Admin</p>
+                        </div>
+                    </div>
+                </div>
+                <nav class="mt-5 flex-1 overflow-y-auto">
+                    <ul class="space-y-2">
+                        <!-- Menu Items -->
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="index.html" class="flex items-center">
+                                <i class="fas fa-tachometer-alt mr-3"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="form.html" class="flex items-center">
+                                <i class="fab fa-wpforms mr-3"></i>
+                                <span>Form</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="table.html" class="flex items-center">
+                                <i class="fas fa-table mr-3"></i>
+                                <span>Table</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="card.html" class="flex items-center">
+                                <i class="fas fa-th mr-3"></i>
+                                <span>Card</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="editor.html" class="flex items-center">
+                                <i class="fas fa-code mr-3"></i>
+                                <span>Code Editor</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="#" class="flex items-center">
+                                <i class="fas fa-cogs mr-3"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                        <li class="px-6 py-3 hover:bg-gray-700 rounded-lg">
+                            <a href="#" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-3"></i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- Sidebar Close Button -->
+                <button id="sidebar-close" class="absolute top-2 right-2 md:hidden text-gray-300 focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 mb-16 md:mb-0"> <!-- Added margin-bottom for mobile footer space -->
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-3xl font-semibold">Dashboard Overview</h1>
+            </div>
+            <!-- Toast Messages Group -->
+            <div class="bg-gray-800 rounded-lg p-5 mb-6">
+                <div class="bg-gray-700 p-3 rounded-t-lg">
+                    <h2 class="text-xl font-bold">Toast Messages</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                    <button onclick="showToast('toastGreen')" class="modern-btn bg-gradient-to-r from-green-300 to-green-500">Toast Hijau Pastel</button>
+                    <button onclick="showToast('toastBlue')" class="modern-btn bg-gradient-to-r from-blue-300 to-blue-500">Toast Biru Pastel</button>
+                    <button onclick="showToast('toastPurple')" class="modern-btn bg-gradient-to-r from-purple-300 to-purple-500">Toast Ungu Pastel</button>
+                    <button onclick="showToast('toastPink')" class="modern-btn bg-gradient-to-r from-pink-300 to-pink-500">Toast Pink Pastel</button>
+                    <button onclick="showToast('toastRed')" class="modern-btn bg-gradient-to-r from-red-300 to-red-500">Toast Merah Pastel</button>
+                </div>
+                <div class="bg-gray-700 p-3 rounded-b-lg text-center">
+                    <p>Copyright JzuvGTI</p>
+                </div>
+            </div>
+
+            <!-- Toast Notifications Group -->
+            <div class="bg-gray-800 rounded-lg p-5 mb-6">
+                <div class="bg-gray-700 p-3 rounded-t-lg">
+                    <h2 class="text-xl font-bold">Toast Notifications</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                    <button onclick="showToast('toastError')" class="modern-btn bg-gradient-to-r from-red-600 to-red-800">Error (Merah Biasa)</button>
+                    <button onclick="showToast('toastSuccess')" class="modern-btn bg-gradient-to-r from-green-600 to-green-800">Success (Hijau Biasa)</button>
+                    <button onclick="showToast('toastWarning')" class="modern-btn bg-gradient-to-r from-yellow-600 to-yellow-800 text-gray-800">Warning (Kuning Biasa)</button>
+                    <button onclick="showToast('toastHelp')" class="modern-btn bg-white border-2 border-green-600 text-green-600">Help (Putih Border Hijau)</button>
+                </div>
+                <div class="bg-gray-700 p-3 rounded-b-lg text-center">
+                    <p>Copyright JzuvGTI</p>
+                </div>
+            </div>
+
+            <!-- Toasts -->
+            <div id="toastGreen" class="toast bg-green-400">
+                <div class="toast-header">
+                    <span class="font-semibold">Success</span>
+                    <button onclick="closeToast('toastGreen')">&times;</button>
+                </div>
+                <div class="toast-body">
+                    Toast Hijau Pastel
+                </div>
+            </div>
+            <div id="toastBlue" class="toast bg-blue-400">
+                <div class="toast-header">
+                    <span class="font-semibold">Info</span>
+                    <button onclick="closeToast('toastBlue')">&times;</button>
+                </div>
+                <div class="toast-body">
+                    Toast Biru Pastel
+                </div>
+            </div>
+            <div id="toastPurple" class="toast bg-purple-400">
+                <div class="toast-header">
+                    <span class="font-semibold">Notice</span>
+                    <button onclick="closeToast('toastPurple')">&times;</button>
+                </div>
+                <div class="toast-body">
+                    Toast Ungu Pastel
+                </div>
+            </div>
+            <div id="toastPink" class="toast bg-pink-400">
+                <div class="toast-header">
+                    <span class="font-semibold">Alert</span>
+                    <button onclick="closeToast('toastPink')">&times;</button>
+                </div>
+                <div class="toast-body">
+                    Toast Pink Pastel
+                </div>
+            </div>
+            <div id="toastRed" class="toast bg-red-400">
+                <div class="toast-header">
+                    <span class="font-semibold">Error</span>
+                    <button onclick="closeToast('toastRed')">&times;</button>
+                </div>
+                <div class="toast-body">
+                    Toast Merah Pastel
+                </div>
+            </div>
+            <div id="toastError" class="toast bg-red-500">
+                <div class="toast-header">
+                    <i class="fas fa-exclamation-circle mr-2"></i> Error
+                    <button onclick="closeToast('toastError')">&times;</button>
+                </div>
+                <div class="toast-body">
+                    An error has occurred. Please try again later.
+                </div>
+            </div>
+            <div id="toastSuccess" class="toast bg-green-500">
+                <div class="toast-header">
+                    <i class="fas fa-check-circle mr-2"></i> Success
+                    <button onclick="closeToast('toastSuccess')">&times;</button>
+                </div>
+                <div class="toast-body">
+                    Your operation was successful.
+                </div>
+            </div>
+            <div id="toastWarning" class="toast bg-yellow-500 text-gray-800">
+                <div class="toast-header">
+                    <i class="fas fa-exclamation-triangle mr-2"></i> Warning
+                    <button onclick="closeToast('toastWarning')">&times;</button>
+                </div>
+                <div class="toast-body">
+                    Please be cautious with this action.
+                </div>
+            </div>
+            <div id="toastHelp" class="toast bg-white border-green-500 border-2 text-green-600">
+                <div class="toast-header">
+                    <i class="fas fa-question-circle mr-2"></i> Help
+                    <button onclick="closeToast('toastHelp')">&times;</button>
+                </div>
+                <div class="toast-body">
+                    Here's some help information for you.
+                </div>
+            </div>
+        </main>
+
+        <!-- Mobile Footer -->
+        <footer class="md:hidden fixed bottom-0 w-full bg-gray-800 text-gray-200 flex justify-around items-center h-16">
+            <a href="index.html">
+                <i class="fas fa-tachometer-alt text-lg"></i>
+            </a>
+            <a href="table.html">
+                <i class="fas fa-table text-lg"></i>
+            </a>
+            <a href="form.html">
+                <i class="fab fa-wpforms text-lg"></i>
+            </a>
+            <a href="editor.html">
+                <i class="fas fa-code text-lg"></i>
+            </a>
+            <a href="toast.html">
+                <i class="fas fa-bell text-lg"></i>
+            </a>
+            <a href="#">
+                <i class="fas fa-cogs text-lg"></i>
+            </a>
+            <a href="#">
+                <i class="fas fa-sign-out-alt text-lg"></i>
+            </a>
+        </footer>
+    </div>
+    <script>
+        function showToast(id) {
+            const toast = document.getElementById(id);
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 4000);
+        }
+
+        function closeToast(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
